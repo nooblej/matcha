@@ -1558,4 +1558,4 @@ async def comp(ctx):
 
 
 
-bot.run('')
+bot.run('<token here>')
