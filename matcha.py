@@ -538,7 +538,7 @@ class PDmod(discord.ui.Modal, title = 'Profile decoration'):#reworked
         label="Which decoration would you like to buy?",
         required=True,
         max_length=500,
-        placeholder="We have Feelin' Retro, Pirates, Galaxy, Lofi Vibes, Anime, Elements, Cyberpunk, Fantasy, Springtoons"
+        placeholder="We have Feelin' Retro, Pirates, Galaxy, Lofi Vibes, Anime, Elements, Cyberpunk, Fantasy, Springtoons, and Arcade!"
     )
 
     Qty = discord.ui.TextInput(
