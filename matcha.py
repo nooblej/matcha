@@ -49,7 +49,7 @@ class AA(discord.ui.Modal, title = "Order placement"):  #reworked
         style=discord.TextStyle.short,
         label="How many accounts??",
         required=True,
-        placeholder="Two, for me and my friend....."
+        placeholder="1,2,3......"
     )
 
     Pmt = discord.ui.TextInput(
@@ -207,7 +207,7 @@ class Minecraft(discord.ui.Modal, title = "Order placement"): #reworked
         style=discord.TextStyle.short,
         label="How many accounts would you like to buy?",
         required=True,
-        placeholder="Two, for me and my friend....."
+        placeholder="1,2,3......"
     )
 
     Pmt = discord.ui.TextInput(
@@ -243,7 +243,7 @@ class PDmod(discord.ui.Modal, title = 'Profile decoration'):#reworked
         style=discord.TextStyle.short,
         label="What Quantity?",
         required=True,
-        placeholder="Two, for me and my friend....."
+        placeholder="1,2,3......"
     )
 
     Pmt = discord.ui.TextInput(
@@ -272,7 +272,7 @@ class NitroBasic(discord.ui.Modal, title = "Order placement"):#reworked
         style=discord.TextStyle.short,
         label="What Quantity?",
         required=True,
-        placeholder="Two, for me and my friend....."
+        placeholder="1,2,3......"
     )
 
     Pmt = discord.ui.TextInput(
@@ -300,7 +300,7 @@ class NitroBoostm(discord.ui.Modal, title = "Order placement"):#reworked
         style=discord.TextStyle.short,
         label="What Quantity?",
         required=True,
-        placeholder="Two, for me and my friend....."
+        placeholder="1,2,3......"
     )
 
     Pmt = discord.ui.TextInput(
@@ -328,7 +328,7 @@ class NitroBoosty(discord.ui.Modal, title = "Order placement"):#reworked
         style=discord.TextStyle.short,
         label="What Quantity?",
         required=True,
-        placeholder="Two, for me and my friend....."
+        placeholder="1,2,3......"
     )
 
     Pmt = discord.ui.TextInput(
@@ -401,7 +401,7 @@ class Netflix(discord.ui.Modal, title = "Order placement"):#reworked
         style=discord.TextStyle.short,
         label="What Quantity?",
         required=True,
-        placeholder="Two, for me and my friend....."
+        placeholder="1,2,3......"
     )
 
     Pmt = discord.ui.TextInput(
@@ -438,7 +438,7 @@ class Youtube(discord.ui.Modal, title = "Order placement"):#reworked
         style=discord.TextStyle.short,
         label="What Quantity?",
         required=True,
-        placeholder="Two, for me and my friend....."
+        placeholder="1,2,3......"
     )
 
     Pmt = discord.ui.TextInput(
@@ -474,7 +474,7 @@ class Spotify(discord.ui.Modal, title = "Order placement"):#reworked
         style=discord.TextStyle.short,
         label="What Quantity?",
         required=True,
-        placeholder="Two, for me and my friend....."
+        placeholder="1,2,3......"
     )
 
     Pmt = discord.ui.TextInput(
@@ -511,7 +511,7 @@ class Sonyliv(discord.ui.Modal, title = "Order placement"):#reworked
         style=discord.TextStyle.short,
         label="What Quantity?",
         required=True,
-        placeholder="Two, for me and my friend....."
+        placeholder="1,2,3......"
     )
 
     Pmt = discord.ui.TextInput(
@@ -548,7 +548,7 @@ class Crunchyroll(discord.ui.Modal, title = "Order placement"):#reworked
         style=discord.TextStyle.short,
         label="What Quantity?",
         required=True,
-        placeholder="Two, for me and my friend....."
+        placeholder="1,2,3......"
     )
 
     Pmt = discord.ui.TextInput(
@@ -585,7 +585,7 @@ class Prime(discord.ui.Modal, title = "Order placement"):#reworked
         style=discord.TextStyle.short,
         label="What Quantity?",
         required=True,
-        placeholder="Two, for me and my friend....."
+        placeholder="1,2,3......"
     )
 
     Pmt = discord.ui.TextInput(
@@ -1226,6 +1226,7 @@ async def upi(ctx):
         title= "Pay here",
     )
     embed.add_field(name='', value='', inline=False)
+    embed.set_image(url='https://cdn.discordapp.com/attachments/920899490574110730/1250408245646852156/Screenshot_2024-06-12-16-45-26-43_ba41e9a642e6e0e2b03656bfbbffd6e4.jpg?ex=666ad4ed&is=6669836d&hm=7642c48de36693112cf1346a87f907eb7d6d14bafb9ad3d7242edad4b712b85d&')
     embed.set_footer(text = "discord.gg/matcha")
     embed.add_field(name='<:m_greenheart:1230018368338133054> ***Provide SS of payment***', value='<a:m_cowroll:1233436664328753245> *No SS = No transaction*')
     embed.set_thumbnail(url='https://cdn.discordapp.com/attachments/920899490574110730/1248869818937901136/a_7dd45d52d7262c3a764ec9f82908def2.gif?ex=66653c27&is=6663eaa7&hm=4f3cf9846ec7c3f87e6f3ef01a49e27e57518a28f96230f34641e94751d57024&')
