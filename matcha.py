@@ -16,6 +16,30 @@ channel = 1249031124873642005 #1243213659883311206 build a boat, 124879444894338
 async def on_ready():
     print("All oiled up for you daddy <3 UwU")
 
+class ConCan(discord.ui.View):
+
+    @discord.ui.button(label="Confirm", style=discord.ButtonStyle.success, emoji="✅")
+    async def confirm(self, interaction : discord.Interaction, button : discord.Button):
+        button.disabled=True
+        await interaction.response.edit_message(view=self)
+        await interaction.channel.send(f"Order has been confirmed! Please wait for one of our admins to contact you.")
+        self.stop
+
+    @discord.ui.button(label="Cancel", style=discord.ButtonStyle.danger, emoji="❎")
+    async def cancel(self, interaction : discord.Interaction, button: discord.Button):
+        self.disable_all_items()
+        await interaction.response.edit_message(view=self)
+        await interaction.channel.send(f"Order has been canceled. Please type `,order` to try again!")
+        self.stop
+
+
+    def disable_all_items(self):
+        for child in self.children:
+            child.disabled = True
+
+    
+
+
 class AA(discord.ui.Modal, title = "Order placement"):  #reworked
 
     Age = discord.ui.TextInput(
@@ -48,7 +72,11 @@ class AA(discord.ui.Modal, title = "Order placement"):  #reworked
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Number of accounts:** {self.Qty.value}", value=(f" "), inline=False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Payment Via:** {self.Pmt.value}", value=(f''), inline=False)
         embed.set_footer(text="✅- Confirm ❌- Cancel ")
-        await interaction.response.send_message(embed=embed)
+
+        view = ConCan()
+
+        await interaction.response.send_message(embed=embed, view=view)
+        
 
 class SM(discord.ui.Modal, title = "Server Members"):   #reworked
 
@@ -208,7 +236,7 @@ class PDmod(discord.ui.Modal, title = 'Profile decoration'):#reworked
         label="Which decoration would you like to buy?",
         required=True,
         max_length=500,
-        placeholder="We have Feelin' Retro, Pirates, Galaxy, Lofi Vibes, Anime, Elements, Cyberpunk, Fantasy, Springtoons, and Arcade!"
+        placeholder="We have Feelin' Retro, Pirates, Galaxy, Lofi Vibes, Anime, Elements, Cyberpunk, Fantasy, Springtoons and latest release, Arcade!"
     )
 
     Qty = discord.ui.TextInput(
@@ -348,7 +376,7 @@ class ServerBoost(discord.ui.Modal, title = "Order placement"):#reworked
         )
         embed.set_author(name=interaction.user)
 
-        embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Numeber of Months:** {self.Duration.value}", value=(f" "), inline=False)
+        embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Number of Months:** {self.Duration.value}", value=(f" "), inline=False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Number of Boosts:** {self.Quantity.value}", value=(f" "), inline=False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Payment Via:** {self.Pmt.value}", value=(f''), inline=False)
         embed.set_footer(text="✅- Confirm ❌- Cancel")
@@ -1166,7 +1194,7 @@ async def ltc(ctx):
         title= "Pay here",
     )
     embed.add_field(name='', value='', inline=False)
-    embed.set_footer(text = "discord.com/matcha")
+    embed.set_footer(text = "discord.gg/matcha")
     embed.add_field(name='<:m_greenheart:1230018368338133054> ***Provide SS of payment***', value='<a:m_cowroll:1233436664328753245> *No SS = No transaction*')
     embed.set_thumbnail(url='https://cdn.discordapp.com/attachments/920899490574110730/1248869818937901136/a_7dd45d52d7262c3a764ec9f82908def2.gif?ex=66653c27&is=6663eaa7&hm=4f3cf9846ec7c3f87e6f3ef01a49e27e57518a28f96230f34641e94751d57024&')
 
@@ -1180,7 +1208,7 @@ async def upi(ctx):
         title= "Pay here",
     )
     embed.add_field(name='', value='', inline=False)
-    embed.set_footer(text = "discord.com/matcha")
+    embed.set_footer(text = "discord.gg/matcha")
     embed.add_field(name='<:m_greenheart:1230018368338133054> ***Provide SS of payment***', value='<a:m_cowroll:1233436664328753245> *No SS = No transaction*')
     embed.set_thumbnail(url='https://cdn.discordapp.com/attachments/920899490574110730/1248869818937901136/a_7dd45d52d7262c3a764ec9f82908def2.gif?ex=66653c27&is=6663eaa7&hm=4f3cf9846ec7c3f87e6f3ef01a49e27e57518a28f96230f34641e94751d57024&')
 
@@ -1193,7 +1221,7 @@ async def pp(ctx):
         description= "## SEND IN FRIENDS AND FAMILY ONLY",
         title= "Instructions",
     )
-    embed.set_footer(text = "discord.com/matcha")
+    embed.set_footer(text = "discord.gg/matcha")
     embed.add_field(name='Send the amount in `euros[€]`',value='<a:m_greenstar:1230018378719297566> DO **NOT** ATTACH ANY __NOTES__ \n<a:m_greenstar:1230018378719297566> SEND FROM PAYPAL **BALANCE**, NOT *CARD* OR *BANK*\n<a:m_greenstar:1230018378719297566> ***TOS BROKEN = NO REFUND***', inline=False)
     embed.add_field(name='<:m_greenheart:1230018368338133054> ***Provide SS of payment***', value='<a:m_cowroll:1233436664328753245> *No SS = No transaction*')
     embed.set_thumbnail(url='https://cdn.discordapp.com/attachments/920899490574110730/1248869818937901136/a_7dd45d52d7262c3a764ec9f82908def2.gif?ex=66653c27&is=6663eaa7&hm=4f3cf9846ec7c3f87e6f3ef01a49e27e57518a28f96230f34641e94751d57024&')
@@ -1209,7 +1237,7 @@ async def queue(ctx):
     )
     embed.add_field(name='Thank you for ordering!',value='- You can check your order status in https://discord.com/channels/1221251673888919633/1221251674258014210\n- ETA of orders is usually 0-2 days!', inline=False)
     embed.set_thumbnail(url='https://cdn.discordapp.com/attachments/920899490574110730/1248869818937901136/a_7dd45d52d7262c3a764ec9f82908def2.gif?ex=66653c27&is=6663eaa7&hm=4f3cf9846ec7c3f87e6f3ef01a49e27e57518a28f96230f34641e94751d57024&')
-    embed.set_footer(text = "discord.com/matcha")
+    embed.set_footer(text = "discord.gg/matcha")
 
     await ctx.send(embed = embed)
 
@@ -1222,10 +1250,15 @@ async def comp(ctx):
     )
     embed.add_field(name='Thank you for trusting us!',value='- Check your dms <3\n- Vouch to activate warranty\n- Hope to see you again!', inline=False)
     embed.set_thumbnail(url='https://cdn.discordapp.com/attachments/920899490574110730/1248869818937901136/a_7dd45d52d7262c3a764ec9f82908def2.gif?ex=66653c27&is=6663eaa7&hm=4f3cf9846ec7c3f87e6f3ef01a49e27e57518a28f96230f34641e94751d57024&')
-    embed.set_footer(text = "discord.com/matcha")
+    embed.set_footer(text = "discord.gg/matcha")
 
     await ctx.send(embed = embed)
 
+@bot.command()
+async def q(ctx, buyer , payment, *,order1): #, order2: Optional[str] = None, order3: Optional[str] = None
+    await ctx.channel.purge(limit=1)
+    await ctx.send(f'‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎**new order** ***!*** \n<:m_greenbow:1230017703650000917>Buyer : {buyer}\n {order1}<:greendino:1230017724508540979>\n<:00niasarrow:1216970175245713458> {payment}')
 
 
-bot.run(' token here ')
+
+bot.run(' ')
