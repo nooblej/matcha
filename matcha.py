@@ -20,25 +20,22 @@ class ConCan(discord.ui.View):
 
     @discord.ui.button(label="Confirm", style=discord.ButtonStyle.success, emoji="✅")
     async def confirm(self, interaction : discord.Interaction, button : discord.Button):
-        button.disabled=True
+        self.disable_all_items()
         await interaction.response.edit_message(view=self)
-        await interaction.channel.send(f"Order has been confirmed! Please wait for one of our admins to contact you.")
+        await interaction.channel.send(f"✅ Order has been confirmed! Please wait for one of our admins to contact you.")
         self.stop
 
     @discord.ui.button(label="Cancel", style=discord.ButtonStyle.danger, emoji="❎")
     async def cancel(self, interaction : discord.Interaction, button: discord.Button):
         self.disable_all_items()
         await interaction.response.edit_message(view=self)
-        await interaction.channel.send(f"Order has been canceled. Please type `,order` to try again!")
+        await interaction.channel.send(f"❎ Order has been canceled. Please type `,order` to try again!")
         self.stop
 
 
     def disable_all_items(self):
         for child in self.children:
             child.disabled = True
-
-    
-
 
 class AA(discord.ui.Modal, title = "Order placement"):  #reworked
 
@@ -71,10 +68,8 @@ class AA(discord.ui.Modal, title = "Order placement"):  #reworked
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Account Age:** {self.Age.value}", value=(f" "), inline=False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Number of accounts:** {self.Qty.value}", value=(f" "), inline=False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Payment Via:** {self.Pmt.value}", value=(f''), inline=False)
-        embed.set_footer(text="✅- Confirm ❌- Cancel ")
-
+        embed.set_footer(text="discord.gg/matcha")
         view = ConCan()
-
         await interaction.response.send_message(embed=embed, view=view)
         
 
@@ -110,8 +105,9 @@ class SM(discord.ui.Modal, title = "Server Members"):   #reworked
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Member status:** {self.Status.value}", value=(f" "), inline=False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Number of members:** {self.Qty.value}", value=(f" "), inline=False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Payment Via:** {self.Pmt.value}", value=(f''), inline=False)
-        embed.set_footer(text="✅- Confirm ❌- Cancel")
-        await interaction.response.send_message(embed=embed)
+        embed.set_footer(text="discord.gg/matcha")
+        view = ConCan()
+        await interaction.response.send_message(embed=embed, view=view)
     
 class SG(discord.ui.Modal, title = "Steam game"):  #reworked
 
@@ -145,8 +141,9 @@ class SG(discord.ui.Modal, title = "Steam game"):  #reworked
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Game name:** {self.Game.value}", value=(f" "), inline=False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Copies:** {self.Copies.value}", value=(f" "), inline=False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Payment Via:** {self.Pmt.value}", value=(f''), inline=False)
-        embed.set_footer(text="✅- Confirm ❌- Cancel")
-        await interaction.response.send_message(embed=embed)
+        embed.set_footer(text="discord.gg/matcha")
+        view = ConCan()
+        await interaction.response.send_message(embed=embed, view=view)
 
 class Robux(discord.ui.Modal, title = "Creds"):  #reworked
 
@@ -172,8 +169,9 @@ class Robux(discord.ui.Modal, title = "Creds"):  #reworked
         embed.set_author(name=interaction.user)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Quantity:** {self.Qty.value}", value=(f" "), inline=False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Payment Via:** {self.Pmt.value}", value=(f''), inline=False)
-        embed.set_footer(text="✅- Confirm ❌- Cancel")
-        await interaction.response.send_message(embed=embed)
+        embed.set_footer(text="discord.gg/matcha")
+        view = ConCan()
+        await interaction.response.send_message(embed=embed, view=view)
 
 class Vbucks(discord.ui.Modal, title = "Creds"):  #reworked
 
@@ -199,8 +197,9 @@ class Vbucks(discord.ui.Modal, title = "Creds"):  #reworked
         embed.set_author(name=interaction.user)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Quantity:** {self.Qty.value}", value=(f" "), inline=False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Payment Via:** {self.Pmt.value}", value=(f''), inline=False)
-        embed.set_footer(text="✅- Confirm ❌- Cancel")
-        await interaction.response.send_message(embed=embed)
+        embed.set_footer(text="discord.gg/matcha")
+        view = ConCan()
+        await interaction.response.send_message(embed=embed, view=view)
 
 class Minecraft(discord.ui.Modal, title = "Order placement"): #reworked
 
@@ -226,8 +225,9 @@ class Minecraft(discord.ui.Modal, title = "Order placement"): #reworked
         embed.set_author(name=interaction.user)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Quantity:** {self.Qty.value}", value=(f" "), inline=False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Payment Via:** {self.Pmt.value}", value=(f''), inline=False)
-        embed.set_footer(text="✅- Confirm ❌- Cancel")
-        await interaction.response.send_message(embed=embed)
+        embed.set_footer(text="discord.gg/matcha")
+        view = ConCan()
+        await interaction.response.send_message(embed=embed, view=view)
 
 class PDmod(discord.ui.Modal, title = 'Profile decoration'):#reworked
 
@@ -262,8 +262,9 @@ class PDmod(discord.ui.Modal, title = 'Profile decoration'):#reworked
         embed.add_field(name=f"<a:m_greenstar:123008378719297566> **Decoration:** {self.PD.value}", value=(f" "), inline= False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Quantity:** {self.Qty.value}", value=(f" "), inline=False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Payment Via:** {self.Pmt.value}", value=(f''), inline=False)
-        embed.set_footer(text="✅- Confirm ❌- Cancel")
-        await interaction.response.send_message(embed=embed)
+        embed.set_footer(text="discord.gg/matcha")
+        view = ConCan()
+        await interaction.response.send_message(embed=embed, view=view)
 
 class NitroBasic(discord.ui.Modal, title = "Order placement"):#reworked
 
@@ -289,8 +290,9 @@ class NitroBasic(discord.ui.Modal, title = "Order placement"):#reworked
         embed.set_author(name=interaction.user)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Quantity:** {self.Qty.value}", value=(f" "), inline=False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Payment Via:** {self.Pmt.value}", value=(f''), inline=False)
-        embed.set_footer(text="✅- Confirm ❌- Cancel")
-        await interaction.response.send_message(embed=embed)
+        embed.set_footer(text="discord.gg/matcha")
+        view = ConCan()
+        await interaction.response.send_message(embed=embed, view=view)
 
 class NitroBoostm(discord.ui.Modal, title = "Order placement"):#reworked
 
@@ -316,8 +318,9 @@ class NitroBoostm(discord.ui.Modal, title = "Order placement"):#reworked
         embed.set_author(name=interaction.user)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Quantity:** {self.Qty.value}", value=(f" "), inline=False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Payment Via:** {self.Pmt.value}", value=(f''), inline=False)
-        embed.set_footer(text="✅- Confirm ❌- Cancel")
-        await interaction.response.send_message(embed=embed)
+        embed.set_footer(text="discord.gg/matcha")
+        view = ConCan()
+        await interaction.response.send_message(embed=embed, view=view)
 
 class NitroBoosty(discord.ui.Modal, title = "Order placement"):#reworked
 
@@ -343,8 +346,9 @@ class NitroBoosty(discord.ui.Modal, title = "Order placement"):#reworked
         embed.set_author(name=interaction.user)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Quantity:** {self.Qty.value}", value=(f" "), inline=False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Payment Via:** {self.Pmt.value}", value=(f''), inline=False)
-        embed.set_footer(text="✅- Confirm ❌- Cancel")
-        await interaction.response.send_message(embed=embed)
+        embed.set_footer(text="discord.gg/matcha")
+        view = ConCan()
+        await interaction.response.send_message(embed=embed, view=view)
 
 class ServerBoost(discord.ui.Modal, title = "Order placement"):#reworked
 
@@ -379,8 +383,9 @@ class ServerBoost(discord.ui.Modal, title = "Order placement"):#reworked
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Number of Months:** {self.Duration.value}", value=(f" "), inline=False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Number of Boosts:** {self.Quantity.value}", value=(f" "), inline=False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Payment Via:** {self.Pmt.value}", value=(f''), inline=False)
-        embed.set_footer(text="✅- Confirm ❌- Cancel")
-        await interaction.response.send_message(embed=embed)
+        embed.set_footer(text="discord.gg/matcha")
+        view = ConCan()
+        await interaction.response.send_message(embed=embed, view=view)
 
 class Netflix(discord.ui.Modal, title = "Order placement"):#reworked
 
@@ -415,8 +420,9 @@ class Netflix(discord.ui.Modal, title = "Order placement"):#reworked
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Duration** {self.Dur.value}", value=(f" "), inline=False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Quantity:** {self.Qty.value}", value=(f" "), inline=False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Payment Via:** {self.Pmt.value}", value=(f''), inline=False)
-        embed.set_footer(text="✅- Confirm ❌- Cancel")
-        await interaction.response.send_message(embed=embed)
+        embed.set_footer(text="discord.gg/matcha")
+        view = ConCan()
+        await interaction.response.send_message(embed=embed, view=view)
 
 class Youtube(discord.ui.Modal, title = "Order placement"):#reworked
 
@@ -451,8 +457,9 @@ class Youtube(discord.ui.Modal, title = "Order placement"):#reworked
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Package Duration:** {self.Dur.value}", value=(f" "), inline=False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Quantity:** {self.Qty.value}", value=(f" "), inline=False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Payment Via:** {self.Pmt.value}", value=(f''), inline=False)
-        embed.set_footer(text="✅- Confirm ❌- Cancel")
-        await interaction.response.send_message(embed=embed)
+        embed.set_footer(text="discord.gg/matcha")
+        view = ConCan()
+        await interaction.response.send_message(embed=embed, view=view)
 
 class Spotify(discord.ui.Modal, title = "Order placement"):#reworked
 
@@ -486,8 +493,9 @@ class Spotify(discord.ui.Modal, title = "Order placement"):#reworked
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Package Duration:** {self.Dur.value}", value=(f" "), inline=False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Quantity:** {self.Qty.value}", value=(f" "), inline=False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Payment Via:** {self.Pmt.value}", value=(f''), inline=False)
-        embed.set_footer(text="✅- Confirm ❌- Cancel")
-        await interaction.response.send_message(embed=embed)
+        embed.set_footer(text="discord.gg/matcha")
+        view = ConCan()
+        await interaction.response.send_message(embed=embed, view=view)
 
 class Sonyliv(discord.ui.Modal, title = "Order placement"):#reworked
 
@@ -522,8 +530,9 @@ class Sonyliv(discord.ui.Modal, title = "Order placement"):#reworked
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Package Duration:** {self.Dur.value}", value=(f" "), inline=False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Quantity:** {self.Qty.value}", value=(f" "), inline=False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Payment Via:** {self.Pmt.value}", value=(f''), inline=False)
-        embed.set_footer(text="✅- Confirm ❌- Cancel")
-        await interaction.response.send_message(embed=embed)
+        embed.set_footer(text="discord.gg/matcha")
+        view = ConCan()
+        await interaction.response.send_message(embed=embed, view=view)
 
 class Crunchyroll(discord.ui.Modal, title = "Order placement"):#reworked
 
@@ -558,8 +567,9 @@ class Crunchyroll(discord.ui.Modal, title = "Order placement"):#reworked
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Package Duration:** {self.Dur.value}", value=(f" "), inline=False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Quantity:** {self.Qty.value}", value=(f" "), inline=False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Payment Via:** {self.Pmt.value}", value=(f''), inline=False)
-        embed.set_footer(text="✅- Confirm ❌- Cancel")
-        await interaction.response.send_message(embed=embed)
+        embed.set_footer(text="discord.gg/matcha")
+        view = ConCan()
+        await interaction.response.send_message(embed=embed, view=view)
 
 class Prime(discord.ui.Modal, title = "Order placement"):#reworked
 
@@ -594,8 +604,9 @@ class Prime(discord.ui.Modal, title = "Order placement"):#reworked
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Package Duration:** {self.Dur.value}", value=(f" "), inline=False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Quantity:** {self.Qty.value}", value=(f" "), inline=False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Payment Via:** {self.Pmt.value}", value=(f''), inline=False)
-        embed.set_footer(text="✅- Confirm ❌- Cancel")
-        await interaction.response.send_message(embed=embed)
+        embed.set_footer(text="discord.gg/matcha")
+        view = ConCan()
+        await interaction.response.send_message(embed=embed, view=view)
 
 class SBINSTA(discord.ui.Modal, title = "Order placement"):#reworked
 
@@ -630,8 +641,9 @@ class SBINSTA(discord.ui.Modal, title = "Order placement"):#reworked
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Followers:** {self.Followers.value}", value=(f" "), inline=False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Likes:** {self.Likes.value}", value=(f" "), inline=False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Payment Via:** {self.Pmt.value}", value=(f''), inline=False)
-        embed.set_footer(text="✅- Confirm ❌- Cancel")
-        await interaction.response.send_message(embed=embed)
+        embed.set_footer(text="discord.gg/matcha")
+        view = ConCan()
+        await interaction.response.send_message(embed=embed, view=view)
 
 class SBYT(discord.ui.Modal, title = "Order placement"):#reworked
 
@@ -665,8 +677,9 @@ class SBYT(discord.ui.Modal, title = "Order placement"):#reworked
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Subscribers:** {self.Subscribers.value}", value=(f" "), inline=False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Views:** {self.Views.value}", value=(f" "), inline=False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Payment Via:** {self.Pmt.value}", value=(f''), inline=False)
-        embed.set_footer(text="✅- Confirm ❌- Cancel")
-        await interaction.response.send_message(embed=embed)
+        embed.set_footer(text="discord.gg/matcha")
+        view = ConCan()
+        await interaction.response.send_message(embed=embed, view=view)
 
 class SBTIKTOK(discord.ui.Modal, title = "Order placement"):#reworked
 
@@ -710,8 +723,9 @@ class SBTIKTOK(discord.ui.Modal, title = "Order placement"):#reworked
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Likes:** {self.Likes.value}", value=(f" "), inline=False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Views:** {self.Views.value}", value=(f" "), inline=False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Payment Via:** {self.Pmt.value}", value=(f''), inline=False)
-        embed.set_footer(text="✅- Confirm ❌- Cancel")
-        await interaction.response.send_message(embed=embed)
+        embed.set_footer(text="discord.gg/matcha")
+        view = ConCan()
+        await interaction.response.send_message(embed=embed, view=view)
 
 class SBTWITTER(discord.ui.Modal, title = "Order placement"):#reworked
 
@@ -753,8 +767,9 @@ class SBTWITTER(discord.ui.Modal, title = "Order placement"):#reworked
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Likes:** {self.Likes.value}", value=(f" "), inline=False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Retweets:** {self.Retweet.value}", value=(f" "), inline=False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Payment Via:** {self.Pmt.value}", value=(f''), inline=False)
-        embed.set_footer(text="✅- Confirm ❌- Cancel")
-        await interaction.response.send_message(embed=embed)
+        embed.set_footer(text="discord.gg/matcha")
+        view = ConCan()
+        await interaction.response.send_message(embed=embed, view=view)
 
 class SBTWITCH(discord.ui.Modal, title = "Order placement"):#reworked
 
@@ -782,8 +797,9 @@ class SBTWITCH(discord.ui.Modal, title = "Order placement"):#reworked
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Followers:** {self.Followers.value}", value=(f" "), inline=False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Payment Via:** {self.Pmt.value}", value=(f''), inline=False)
         embed.set_footer(text="✅- Confirm ❌- Cancel")
-        embed.set_footer(text="✅- Confirm ❌- Cancel")
-        await interaction.response.send_message(embed=embed)
+        embed.set_footer(text="discord.gg/matcha")
+        view = ConCan()
+        await interaction.response.send_message(embed=embed, view=view)
 
 class SBTELEGRAM(discord.ui.Modal, title = "Order placement"):#reworked
 
@@ -817,8 +833,9 @@ class SBTELEGRAM(discord.ui.Modal, title = "Order placement"):#reworked
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Members:** {self.Members.value}", value=(f" "), inline=False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Views:** {self.Views.value}", value=(f" "), inline=False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Payment Via:** {self.Pmt.value}", value=(f''), inline=False)
-        embed.set_footer(text="✅- Confirm ❌- Cancel")
-        await interaction.response.send_message(embed=embed)
+        embed.set_footer(text="discord.gg/matcha")
+        view = ConCan()
+        await interaction.response.send_message(embed=embed, view=view)
 
 class OTHER(discord.ui.Modal, title = "Order placement"):#reworked
 
@@ -853,8 +870,9 @@ class OTHER(discord.ui.Modal, title = "Order placement"):#reworked
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Name of product:** {self.Name.value}", value=(f" "), inline=False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Descrption:** {self.Description.value}", value=(f" "), inline=False)
         embed.add_field(name=f"<a:m_greenstar:1230018378719297566> **Payment Via:** {self.Pmt.value}", value=(f''), inline=False)
-        embed.set_footer(text="✅- Confirm ❌- Cancel")
-        await interaction.response.send_message(embed=embed)
+        embed.set_footer(text="discord.gg/matcha")
+        view = ConCan()
+        await interaction.response.send_message(embed=embed, view=view)
 
 class GCview(discord.ui.Select): #resolved
     def __init__(self):
