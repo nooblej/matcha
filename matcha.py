@@ -11,10 +11,26 @@ import utils
 guildid = 706403459661955104 #706403459661955104 build a boat, 706403459661955104 = matcha shop
 bot = commands.Bot(command_prefix=',', intents=discord.Intents.all())
 channel = 1249031124873642005 #1243213659883311206 build a boat, 1248794448943386685 = matcha queue
+chat = 1224209511963820033
 
 @bot.event
 async def on_ready():
     print("All oiled up for you daddy <3 UwU")
+
+
+class Start(discord.ui.View):
+
+    @discord.ui.button(label="Start order!", style=discord.ButtonStyle.blurple, emoji="📃")
+    async def confirm(self, interaction : discord.Interaction, button : discord.Button):
+        button.disabled=True
+        await interaction.response.edit_message(view=self)
+        view=MainView()
+        await interaction.channel.send(f'What would you like to buy <a:m_kerohi:1221301733658198046>?')
+        await interaction.channel.send(view=view)
+        await view.wait()
+        await view.wait()
+        self.stop
+
 
 class ConCan(discord.ui.View):
 
@@ -71,8 +87,7 @@ class AA(discord.ui.Modal, title = "Order placement"):  #reworked
         embed.set_footer(text="discord.gg/matcha")
         view = ConCan()
         await interaction.response.send_message(embed=embed, view=view)
-        
-
+    
 class SM(discord.ui.Modal, title = "Server Members"):   #reworked
 
     Status = discord.ui.TextInput(
@@ -993,7 +1008,7 @@ class OrderDropdown(discord.ui.Select):#reworked
             discord.SelectOption(label='Server Members', description='Buy active or inactive server members for cheap!' , emoji='<:members:1239545776951132252>', value='ServerMembers'),
             discord.SelectOption(label='Other', description="Select this if your order isnt on our list!", emoji='<:m_toroconfused:1233396013360877639>', value='Other')
      ]
-        super().__init__(options=options, placeholder='Which would you like to purchase?', max_values=1, min_values=1)
+        super().__init__(options=options, placeholder='What would you like to purchase?', max_values=1, min_values=1)
 
     async def callback(self, interaction : discord.Interaction):
         if self.values[0] == 'Nitro':
@@ -1182,14 +1197,58 @@ class MainView(discord.ui.View):
         await interaction.message.edit(view=self)
         self.stop()
 
+# @bot.event
+# async def on_message(message):
+#   """
+#   This event listener checks every message sent in the channel.
+#   """
+#   # Check if the channel ID matches the one you want to monitor (replace with your actual channel ID)
+#   if message.channel.id == chat:
+#     await bot.process_commands(message)
+#     return
+  
+#   if message.author == bot.user:
+#     await bot.process_commands(message)
+#     return
+#   # Convert message content to lowercase for case-insensitive check
+#   content = message.content.lower()
+#   if "order" in content:
+#     view=MainView()
+#     await message.channel.send(f'What would you like to buy <a:m_kerohi:1221301733658198046>?', delete_after = 120)
+#     await message.channel.send(view=view, delete_after=120)
+#     await view.wait()
+#     await view.wait()
+
+#   if "order" not in content:
+#     await bot.process_commands(message)
+
+@bot.event
+async def on_guild_channel_create(channel):
+    view=MainView()
+    await channel.send(f'What would you like to buy <a:m_kerohi:1221301733658198046>?')
+    await channel.send(view=view)
+    await view.wait()
+    await view.wait()
+
+
 @bot.command()
 async def order(ctx):
-    view=MainView()
-    chan = ctx.guild.get_channel(channel)
-    await ctx.send(f'What would you like to buy <a:m_kerohi:1221301733658198046>?', delete_after = 120)
-    await ctx.send(view=view, delete_after=120)
+    view = MainView()
+    await ctx.send(f'What would you like to buy <a:m_kerohi:1221301733658198046>?')
+    await ctx.send(view=view)
     await view.wait()
     await view.wait()
+
+@bot.command()
+async def order1(ctx):
+    embed = discord.Embed(
+            title=(f"Press the 'Start Order' Button when you're ready!"),
+            color=discord.Color.green()
+        )
+    embed.add_field(name=f"List of shit you guys sell (a menu if you were)", value=(""), inline=False)
+    embed.set_footer(text="discord.gg/matcha")
+    view=Start()
+    await ctx.send(embed=embed,view=view)
 
 @bot.command()
 async def ab(ctx):
