@@ -251,7 +251,7 @@ class PDmod(discord.ui.Modal, title = 'Profile decoration'):#reworked
         label="Which decoration would you like to buy?",
         required=True,
         max_length=500,
-        placeholder="We have Feelin' Retro, Pirates, Galaxy, Lofi Vibes, Anime, Elements, Cyberpunk, Fantasy, Springtoons and latest release, Arcade!"
+        placeholder="Feelin' Retro, Pirates, Galaxy, Lofi , Anime, Elements, Cyberpunk, Fantasy, Springtoons and Arcade!"
     )
 
     Qty = discord.ui.TextInput(
@@ -1245,7 +1245,8 @@ async def order1(ctx):
             title=(f"Press the 'Start Order' Button when you're ready!"),
             color=discord.Color.green()
         )
-    embed.add_field(name=f"List of shit you guys sell (a menu if you were)", value=(""), inline=False)
+    embed.add_field(name=f"- Nitro \n - Nitro Boost \n - Nitro Basic", value=(""), inline=False)
+    embed.add_field(name=f"-  \n - Nitro Boost \n - Nitro Basic", value=(""), inline=False)
     embed.set_footer(text="discord.gg/matcha")
     view=Start()
     await ctx.send(embed=embed,view=view)
@@ -1272,9 +1273,10 @@ async def ltc(ctx):
     )
     embed.add_field(name='', value='', inline=False)
     embed.set_footer(text = "discord.gg/matcha")
+    embed.set_image(url='https://cdn.discordapp.com/attachments/920899490574110730/1250860724951973908/image0.jpg?ex=666d2314&is=666bd194&hm=6e06a69cbe297a39577824b1ff8bd7d2d5043ead39dc8d840f74784afd2037fd&')
     embed.add_field(name='<:m_greenheart:1230018368338133054> ***Provide SS of payment***', value='<a:m_cowroll:1233436664328753245> *No SS = No transaction*')
     embed.set_thumbnail(url='https://cdn.discordapp.com/attachments/920899490574110730/1248869818937901136/a_7dd45d52d7262c3a764ec9f82908def2.gif?ex=66653c27&is=6663eaa7&hm=4f3cf9846ec7c3f87e6f3ef01a49e27e57518a28f96230f34641e94751d57024&')
-
+    await ctx.channel.purge(limit=1)
     await ctx.send(embed = embed)
 
 @bot.command()
@@ -1289,7 +1291,7 @@ async def upi(ctx):
     embed.set_footer(text = "discord.gg/matcha")
     embed.add_field(name='<:m_greenheart:1230018368338133054> ***Provide SS of payment***', value='<a:m_cowroll:1233436664328753245> *No SS = No transaction*')
     embed.set_thumbnail(url='https://cdn.discordapp.com/attachments/920899490574110730/1248869818937901136/a_7dd45d52d7262c3a764ec9f82908def2.gif?ex=66653c27&is=6663eaa7&hm=4f3cf9846ec7c3f87e6f3ef01a49e27e57518a28f96230f34641e94751d57024&')
-
+    await ctx.channel.purge(limit=1)
     await ctx.send(embed = embed)
 
 @bot.command()
@@ -1303,33 +1305,33 @@ async def pp(ctx):
     embed.add_field(name='Send the amount in `euros[€]`',value='<a:m_greenstar:1230018378719297566> DO **NOT** ATTACH ANY __NOTES__ \n<a:m_greenstar:1230018378719297566> SEND FROM PAYPAL **BALANCE**, NOT *CARD* OR *BANK*\n<a:m_greenstar:1230018378719297566> ***TOS BROKEN = NO REFUND***', inline=False)
     embed.add_field(name='<:m_greenheart:1230018368338133054> ***Provide SS of payment***', value='<a:m_cowroll:1233436664328753245> *No SS = No transaction*')
     embed.set_thumbnail(url='https://cdn.discordapp.com/attachments/920899490574110730/1248869818937901136/a_7dd45d52d7262c3a764ec9f82908def2.gif?ex=66653c27&is=6663eaa7&hm=4f3cf9846ec7c3f87e6f3ef01a49e27e57518a28f96230f34641e94751d57024&')
-
+    await ctx.channel.purge(limit=1)
     await ctx.send(embed = embed)
 
 @bot.command()
 async def queue(ctx):
     embed = discord.Embed(
         colour=discord.Colour.dark_green(),
-        description= "## __Order is now processing!__",
+        description= "## <:m_greenbow:1230017722252001363> __Order is now processing!__ <:m_greenbow:1230017722252001363>",
         title= "Order Status update",
     )
-    embed.add_field(name='Thank you for ordering!',value='- You can check your order status in https://discord.com/channels/1221251673888919633/1221251674258014210\n- ETA of orders is usually 0-2 days!', inline=False)
+    embed.add_field(name='<:m_greenheart:1230018368338133054> Thank you for ordering!',value='- You can check your order status in https://discord.com/channels/1221251673888919633/1221251674258014210\n- ETA of orders is usually 0-2 days!', inline=False)
     embed.set_thumbnail(url='https://cdn.discordapp.com/attachments/920899490574110730/1248869818937901136/a_7dd45d52d7262c3a764ec9f82908def2.gif?ex=66653c27&is=6663eaa7&hm=4f3cf9846ec7c3f87e6f3ef01a49e27e57518a28f96230f34641e94751d57024&')
     embed.set_footer(text = "discord.gg/matcha")
-
+    await ctx.channel.purge(limit=1)
     await ctx.send(embed = embed)
 
 @bot.command()
 async def comp(ctx):
     embed = discord.Embed(
         colour=discord.Colour.dark_green(),
-        description= "## __Order is now complete!__",
+        description= "## <:m_greenbow:1230017722252001363> __Order is now complete!__ <:m_greenbow:1230017722252001363>",
         title= "Order Status update",
     )
-    embed.add_field(name='Thank you for trusting us!',value='- Check your dms <3\n- Vouch to activate warranty\n- Hope to see you again!', inline=False)
+    embed.add_field(name='<:m_greenheart:1230018368338133054> Thank you for trusting us!',value='- Check your dms <3\n- Vouch to activate warranty\n- Hope to see you again!', inline=False)
     embed.set_thumbnail(url='https://cdn.discordapp.com/attachments/920899490574110730/1248869818937901136/a_7dd45d52d7262c3a764ec9f82908def2.gif?ex=66653c27&is=6663eaa7&hm=4f3cf9846ec7c3f87e6f3ef01a49e27e57518a28f96230f34641e94751d57024&')
     embed.set_footer(text = "discord.gg/matcha")
-
+    await ctx.channel.purge(limit=1)
     await ctx.send(embed = embed)
 
 @bot.command()
@@ -1337,6 +1339,8 @@ async def q(ctx, buyer , payment, *,order1): #, order2: Optional[str] = None, or
     await ctx.channel.purge(limit=1)
     await ctx.send(f'‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎**new order** ***!*** \n<:m_greenbow:1230017703650000917>Buyer : {buyer}\n {order1}<:greendino:1230017724508540979>\n<:00niasarrow:1216970175245713458> {payment}')
 
-
+@bot.command()
+async def menu(ctx):
+    await ctx.send(f"- Nitro \n- Profile Deco \n- Server Boosts ")
 
 bot.run(' ')
