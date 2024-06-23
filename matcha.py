@@ -10,13 +10,109 @@ import utils
  
 guildid = 706403459661955104 #706403459661955104 build a boat, 706403459661955104 = matcha shop
 bot = commands.Bot(command_prefix=',', intents=discord.Intents.all())
-channel = 1249031124873642005 #1243213659883311206 build a boat, 1248794448943386685 = matcha queue
+ticket_channel = 1221296687234945024
 chat = 1224209511963820033
 
 @bot.event
 async def on_ready():
     print("All oiled up for you daddy <3 UwU")
 
+class TicketMaster(discord.ui.View):  #tbc
+
+    @discord.ui.button(label="Create Ticket!", style=discord.ButtonStyle.success, emoji="🎫")
+    async def confirm(self, interaction : discord.Interaction, button : discord.Button):
+        member = interaction.user
+        channel_name = f"{member.name}'s Channel"
+        category = discord.utils.get(interaction.guild.categories, id=ticket_channel)
+        overwrites = {
+        interaction.guild.default_role: discord.PermissionOverwrite(read_messages=False),
+        member: discord.PermissionOverwrite(read_messages=True),
+    }
+        new_channel = await category.create_text_channel(name=channel_name, overwrites=overwrites)
+        welcome_message = f"<a:m_kerohi:1221301733658198046> {member.mention}"
+        embed = discord.Embed(
+                title=(f"Welcome!"),
+                color=discord.Color.gold()
+            )
+        embed.add_field(name=f"**Click 'Start Order' to start placing an order!**", value=("- If youd like to check what we offer, press the 'Show menu' button! \n- For further details and pricing, please check the respective discord channels!"), inline=True)
+        view = Start()
+        await new_channel.send(welcome_message, embed=embed, view=view)
+        await interaction.response.send_message(f"Channel has been created. Please check your channel to continue!", ephemeral=True)
+
+
+
+class Menu(discord.ui.View):
+
+    embed2 = discord.Embed(
+            title=(f" Page 2/2"),
+            color=discord.Color.green()
+        )
+    embed2.add_field(name=f"**Social Boosts**", value=("- Instagram\n- Youtube\n- Tiktok\n- Twitter\n- Twitch\n- Telegram"), inline=True)
+    embed2.add_field(name=f"**Steam games**", value=("- Most offline triple A games, some popular online games like GTA online."), inline=True)
+    embed2.add_field(name=f"**Aged Accounts**", value=("- Accounts from 2016 to 2022"), inline=False)
+    embed2.add_field(name=f"**Server Members**", value=("- Botted but always online \n- Real via paid invites"), inline=True)
+    embed2.add_field(name=f"**Other**", value=("- Check to see if other OTTs or specific subscriptions are available"), inline=True)
+    embed2.set_footer(text="discord.gg/matcha")
+
+    @discord.ui.button(label="Page 2", style=discord.ButtonStyle.green, emoji="⏩")
+    async def page_2(self, interaction: discord.Interaction, button: discord.Button):
+        await interaction.response.edit_message(embed=self.embed2,view=menu2())
+
+    @discord.ui.button(label="Close menu", style=discord.ButtonStyle.green, emoji="❌")
+    async def close_menu(self, interaction: discord.Interaction, button: discord.Button):
+        view = Start()
+        embed = discord.Embed(
+            title=(f"Welcome!"),
+            color=discord.Color.gold()
+        )
+        embed.add_field(name=f"**Click 'Start Order' to start placing an order!**", value=("- If youd like to check what we offer, press the 'Show menu' button! \n- For further details and pricing, please check the respective discord channels!"), inline=True)
+        await interaction.response.edit_message(embed=embed, view=view)
+    
+class menu2(discord.ui.View):
+    embed1 = discord.Embed(
+            title=(f" Page 1/2"),
+            color=discord.Color.green()
+        )
+    embed1.add_field(name=f"**Nitro**", value=("- Nitro Boost (monthly)      \n- Nitro Boost (yearly)    \n- Nitro Basic"), inline=True)
+    embed1.add_field(name=f"**Server Boosts**", value=("- 1m / 3m \n- 4x / 8x / 14x"), inline=True)
+    embed1.add_field(name=f"**Game Credits**", value=("- Robux\n- Vbucks"), inline=False)
+    embed1.add_field(name=f"**Profile Decorations**", value=("- Feelin' Retro \n- Pirates \n- Galaxy\n- Lofi \n- Anime\n- Elements\n- Cyberpunk\n- Fantasy\n- Springtoons\n- Arcade!"), inline=True)
+    embed1.add_field(name=f"**Subscriptions**", value=("- Netflix\n- Spotify\n- Youtube premium\n- Sony Liv\n- Crunchyroll\n- Minecraft\n- Prime Video"), inline=True)
+
+    @discord.ui.button(label="Page 1", style=discord.ButtonStyle.green, emoji="⏪")
+    async def page_1(self, interaction: discord.Interaction, button: discord.Button):
+        await interaction.response.edit_message(embed=self.embed1, view=Menu())
+
+    @discord.ui.button(label="Close menu", style=discord.ButtonStyle.green, emoji="❌")
+    async def close_menu(self, interaction: discord.Interaction, button: discord.Button):
+        view = Start()
+        embed = discord.Embed(
+            title=(f"Welcome!"),
+            color=discord.Color.gold()
+        )
+        embed.add_field(name=f"**Click 'Start Order' to start placing an order!**", value=("- If youd like to check what we offer, press the 'Show menu' button! \n- For further details and pricing, please check the respective discord channels!"), inline=True)
+        await interaction.response.edit_message(embed=embed, view=view)
+
+
+        
+    # @discord.ui.button(label="Page 1", style=discord.ButtonStyle.green, emoji="⏪")
+    # async def page_1(self, interaction: discord.Interaction, button: discord.Button):
+    #     self.current_page = 1
+    #     await self.update_message(interaction)
+
+    # @discord.ui.button(label="Page 2", style=discord.ButtonStyle.green, emoji="⏩")
+    # async def page_2(self, interaction: discord.Interaction, button: discord.Button):
+    #     self.current_page = 2
+    #     await self.update_message(interaction)
+
+    # async def update_message(self, interaction):
+    #     if self.current_page == 1:
+    #         embed = self.embed1
+    #         buttons = [self.page_2]  # Only show Page 2 button
+    #     else:
+    #         embed = self.embed2
+    #         buttons = [self.page_1]  # Only show Page 1 button
+    #     await interaction.response.edit_message(embed=embed, view=self.clear_items().add_item(*buttons))
 
 class Start(discord.ui.View):
 
@@ -25,12 +121,26 @@ class Start(discord.ui.View):
         button.disabled=True
         await interaction.response.edit_message(view=self)
         view=MainView()
-        await interaction.channel.send(f'What would you like to buy <a:m_kerohi:1221301733658198046>?')
+        await interaction.channel.send(f'What would you like to buy <a:m_kerohi:1221301733658198046> ?')
         await interaction.channel.send(view=view)
         await view.wait()
         await view.wait()
         self.stop
 
+    embed1 = discord.Embed(
+            title=(f" Page 1/2"),
+            color=discord.Color.green()
+        )
+    embed1.add_field(name=f"**Nitro**", value=("- Nitro Boost (monthly)      \n- Nitro Boost (yearly)    \n- Nitro Basic"), inline=True)
+    embed1.add_field(name=f"**Server Boosts**", value=("- 1m / 3m \n- 4x / 8x / 14x"), inline=True)
+    embed1.add_field(name=f"**Game Credits**", value=("- Robux\n- Vbucks"), inline=False)
+    embed1.add_field(name=f"**Profile Decorations**", value=("- Feelin' Retro \n- Pirates \n- Galaxy\n- Lofi \n- Anime\n- Elements\n- Cyberpunk\n- Fantasy\n- Springtoons\n- Arcade!"), inline=True)
+    embed1.add_field(name=f"**Subscriptions**", value=("- Netflix\n- Spotify\n- Youtube premium\n- Sony Liv\n- Crunchyroll\n- Minecraft\n- Prime Video"), inline=True)
+
+    @discord.ui.button(label="Show menu", style= discord.ButtonStyle.green, emoji="🛎")
+    async def show(self, interaction: discord.Interaction, button: discord.Button):
+        view = Menu()
+        await interaction.response.edit_message(embed=self.embed1,view=view)
 
 class ConCan(discord.ui.View):
 
@@ -1197,64 +1307,18 @@ class MainView(discord.ui.View):
         await interaction.message.edit(view=self)
         self.stop()
 
-# @bot.event
-# async def on_message(message):
-#   """
-#   This event listener checks every message sent in the channel.
-#   """
-#   # Check if the channel ID matches the one you want to monitor (replace with your actual channel ID)
-#   if message.channel.id == chat:
-#     await bot.process_commands(message)
-#     return
-  
-#   if message.author == bot.user:
-#     await bot.process_commands(message)
-#     return
-#   # Convert message content to lowercase for case-insensitive check
-#   content = message.content.lower()
-#   if "order" in content:
-#     view=MainView()
-#     await message.channel.send(f'What would you like to buy <a:m_kerohi:1221301733658198046>?', delete_after = 120)
-#     await message.channel.send(view=view, delete_after=120)
+# DISABLED LISTENER (REASON = TOO GOOD)
+# @bot.event    
+# async def on_guild_channel_create(channel):
+#     embed = discord.Embed(
+#             title=(f"Welcome!"),
+#             color=discord.Color.gold()
+#         )
+#     embed.add_field(name=f"**Click 'Start Order' to start placing an order!**", value=("- If youd like to check what we offer, press the 'Show menu' button! \n- For further details and pricing, please check the respective discord channels!"), inline=True)
+#     view = Start()
+#     await channel.send(embed = embed, view=view)
 #     await view.wait()
 #     await view.wait()
-
-#   if "order" not in content:
-#     await bot.process_commands(message)
-
-@bot.event
-async def on_guild_channel_create(channel):
-    view=MainView()
-    await channel.send(f'What would you like to buy <a:m_kerohi:1221301733658198046>?')
-    await channel.send(view=view)
-    await view.wait()
-    await view.wait()
-
-
-@bot.command()
-async def order(ctx):
-    view = MainView()
-    await ctx.send(f'What would you like to buy <a:m_kerohi:1221301733658198046>?')
-    await ctx.send(view=view)
-    await view.wait()
-    await view.wait()
-
-@bot.command()
-async def order1(ctx):
-    embed = discord.Embed(
-            title=(f"Press the 'Start Order' Button when you're ready!"),
-            color=discord.Color.green()
-        )
-    embed.add_field(name=f"- Nitro \n - Nitro Boost \n - Nitro Basic", value=(""), inline=False)
-    embed.add_field(name=f"-  \n - Nitro Boost \n - Nitro Basic", value=(""), inline=False)
-    embed.set_footer(text="discord.gg/matcha")
-    view=Start()
-    await ctx.send(embed=embed,view=view)
-
-@bot.command()
-async def ab(ctx):
-    await ctx.channel.purge(limit=1)
-    await ctx.send(f"# <:m_greenheart:1230018368338133054> Type order to place an order!")
 
 @bot.command()
 async def ping(ctx):
@@ -1273,8 +1337,8 @@ async def ltc(ctx):
     )
     embed.add_field(name='', value='', inline=False)
     embed.set_footer(text = "discord.gg/matcha")
-    embed.set_image(url='https://cdn.discordapp.com/attachments/920899490574110730/1250860724951973908/image0.jpg?ex=666d2314&is=666bd194&hm=6e06a69cbe297a39577824b1ff8bd7d2d5043ead39dc8d840f74784afd2037fd&')
     embed.add_field(name='<:m_greenheart:1230018368338133054> ***Provide SS of payment***', value='<a:m_cowroll:1233436664328753245> *No SS = No transaction*')
+    embed.set_image(url='https://cdn.discordapp.com/attachments/920899490574110730/1250860724951973908/image0.jpg?ex=666d2314&is=666bd194&hm=6e06a69cbe297a39577824b1ff8bd7d2d5043ead39dc8d840f74784afd2037fd&')
     embed.set_thumbnail(url='https://cdn.discordapp.com/attachments/920899490574110730/1248869818937901136/a_7dd45d52d7262c3a764ec9f82908def2.gif?ex=66653c27&is=6663eaa7&hm=4f3cf9846ec7c3f87e6f3ef01a49e27e57518a28f96230f34641e94751d57024&')
     await ctx.channel.purge(limit=1)
     await ctx.send(embed = embed)
@@ -1340,7 +1404,60 @@ async def q(ctx, buyer , payment, *,order1): #, order2: Optional[str] = None, or
     await ctx.send(f'‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎**new order** ***!*** \n<:m_greenbow:1230017703650000917>Buyer : {buyer}\n {order1}<:greendino:1230017724508540979>\n<:00niasarrow:1216970175245713458> {payment}')
 
 @bot.command()
+async def order(ctx):
+
+    embed = discord.Embed(
+            title=(f"Welcome!<a:m_kerohi:1221301733658198046>"),
+            color=discord.Color.gold()
+        )
+    embed.add_field(name=f"**Click 'Start Order' to start placing an order!**", value=("- If youd like to check what we offer, press the 'Show menu' button! \n- For further details and pricing, please check the respective discord channels!"), inline=True)
+    view = Start()
+
+    await ctx.send(embed=embed,view=view)
+
+@bot.command()
 async def menu(ctx):
-    await ctx.send(f"- Nitro \n- Profile Deco \n- Server Boosts ")
+    view = Menu()
+    embed1 = discord.Embed(
+            title=(f" Page 1/2"),
+            color=discord.Color.green()
+        )
+    embed1.add_field(name=f"**Nitro**", value=("- Nitro Boost (monthly)      \n- Nitro Boost (yearly)    \n- Nitro Basic"), inline=True)
+    embed1.add_field(name=f"**Server Boosts**", value=("- 1m / 3m \n- 4x / 8x / 14x"), inline=True)
+    embed1.add_field(name=f"**Game Credits**", value=("- Robux\n- Vbucks"), inline=False)
+    embed1.add_field(name=f"**Profile Decorations**", value=("- Feelin' Retro \n- Pirates \n- Galaxy\n- Lofi \n- Anime\n- Elements\n- Cyberpunk\n- Fantasy\n- Springtoons\n- Arcade!"), inline=True)
+    embed1.add_field(name=f"**Subscriptions**", value=("- Netflix\n- Spotify\n- Youtube premium\n- Sony Liv\n- Crunchyroll\n- Minecraft\n- Prime Video"), inline=True)
+    await ctx.send(embed=embed1,view=view)
+
+@bot.command()
+async def ticket(ctx):
+    view = TicketMaster()
+    await ctx.channel.purge(limit = 1)
+    await ctx.send(view = view)
+
+# @bot.event
+# async def on_message(message):
+#   """
+#   This event listener checks every message sent in the channel.
+#   """
+#   # Check if the channel ID matches the one you want to monitor (replace with your actual channel ID)
+#   if message.channel.id == chat:
+#     await bot.process_commands(message)
+#     return
+  
+#   if message.author == bot.user:
+#     await bot.process_commands(message)
+#     return
+#   # Convert message content to lowercase for case-insensitive check
+#   content = message.content.lower()
+#   if "order" in content:
+#     view=MainView()
+#     await message.channel.send(f'What would you like to buy <a:m_kerohi:1221301733658198046>?', delete_after = 120)
+#     await message.channel.send(view=view, delete_after=120)
+#     await view.wait()
+#     await view.wait()
+
+#   if "order" not in content:
+#     await bot.process_commands(message)
 
 bot.run(' ')
