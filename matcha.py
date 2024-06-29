@@ -1393,7 +1393,7 @@ async def queue(ctx):
         description= "## <:m_greenbow:1230017722252001363> __Order is now processing!__ <:m_greenbow:1230017722252001363>",
         title= "Order Status update",
     )
-    embed.add_field(name='<:m_greenheart:1230018368338133054> Thank you for ordering!',value='- You can check your order status in https://discord.com/channels/1221251673888919633/1221251674258014210\n- ETA of orders is usually 0-2 days!', inline=False)
+    embed.add_field(name='<:m_greenheart:1230018368338133054> Thank you for ordering!',value='- ETA of orders is usually 0-2 days!', inline=False)
     embed.set_thumbnail(url='https://cdn.discordapp.com/attachments/920899490574110730/1248869818937901136/a_7dd45d52d7262c3a764ec9f82908def2.gif?ex=66653c27&is=6663eaa7&hm=4f3cf9846ec7c3f87e6f3ef01a49e27e57518a28f96230f34641e94751d57024&')
     embed.set_footer(text = "discord.gg/matcha")
     await ctx.channel.purge(limit=1)
