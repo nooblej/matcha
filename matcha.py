@@ -4,56 +4,196 @@ import random
 from discord.ext import commands
 from typing import Optional
 import io
-from datetime import datetime
+from datetime import datetime, timezone
+import pytz
 from discord.utils import MISSING
-import requests
-import utils 
+import chat_exporter
+from github import Github
+import asyncio
+import time
+import os
  
+token = ''
+gittoken = ''
+
+
 bot = commands.Bot(command_prefix=',', intents=discord.Intents.all())
-ticketchannel = 1221251674258014209 #1248506564327772248 boot, 1221251674258014209 = matcha tick
-channelT = 1254781447395344474 # 1254536938841571399 = boot transcript 1254781447395344474 = matcha trans
-ticketcategory = 1221296687234945024  
-categories = ["1221296687234945024 - Matcha Ticket",
+
+#ticketcategory = category under which the tickets should open
+ticketcategory = 1221296687234945024   
+categories = ["1221296687234945024 - orders (matcha)", 
               "1254554932003078235 - Sussy baka (boot)"]
+#logchannel = channel where the transcript wagera has to be sent
+logchannel = 1221251674518065292 #boot log channel
+logchannels = ["1221251674518065292 - Ticket-logs (matcha)",
+               "1256131499355410493 - log-channel (boot)"]
 
 
 @bot.event
 async def on_ready():
-    # channel = bot.get_channel(ticketchannel)
-    # await channel.purge(limit=1)
-    # embed = discord.Embed(
-    #         title=(f"Place an order!"),
-    #         color=discord.Color.green()
-    #     )
-    # embed.add_field(name=f"Click the button to create a ticket!", value=(""), inline=False)
-    # embed.add_field(name=f"", value=("*please do not open a ticket for no reason*"), inline=False)
-    # embed.set_footer(text="discord.gg/matcha")
-    # await channel.send(embed=embed, view=TicketMaster())
+
+    bot.add_view(TicketOpener())
+    bot.add_view(TicketCloser())
+    bot.add_view(TicketDestroyer())
+    bot.add_view(Start())
+
 
     print("All oiled up for you daddy <3 UwU")
 
-class TicketMaster(discord.ui.View): 
+#trans
+async def get_transcript(member: discord.Member, channel: discord.TextChannel):
+    export = await chat_exporter.export(channel=channel)
+    file_name=f"{member.id}.html"
+    with open(file_name, "w", encoding="utf-8") as f:
+        f.write(export)
 
-    @discord.ui.button(label="Create Ticket!", style=discord.ButtonStyle.success, emoji="🎫")
-    async def confirm(self, interaction : discord.Interaction, button : discord.Button):
-        member = interaction.user
-        channel_name = f"m_{member.name}'s Channel"
-        category = discord.utils.get(interaction.guild.categories, id=ticketcategory)
+#upload
+def upload(file_path: str, member_name: str):
+    github = Github(gittoken)
+    repo = github.get_repo("nooblej/Ticket-Trans")
+    file_name = f"{int(time.time())}"
+    repo.create_file(
+        path=f"tickets/{file_name}.html",
+        message="Ticket Log for {0}".format(member_name),
+        branch="main",
+        content=open(f"{file_path}","r",encoding="utf-8").read()
+    )
+    os.remove(file_path)
+
+    return file_name
+
+#TICKET RELATED CLASSES
+class TicketOpener(discord.ui.View):
+    def __init__(self):
+        super().__init__(timeout=None)
+
+
+    @discord.ui.button(label="Create Ticket!", style=discord.ButtonStyle.blurple, emoji="<a:m_kerohi:1221301733658198046>", custom_id="ticketopen")
+    async def ticket(self, interaction:discord.Interaction, button: discord.Button):
+        await interaction.response.defer(ephemeral=True)
+        category: discord.CategoryChannel = discord.utils.get(interaction.guild.categories, id = ticketcategory)
+        for ch in category.text_channels:
+            if ch.topic.startswith(f"{interaction.user.id} Place Order"):
+                await interaction.followup.send("You already have a ticket in {0}".format(ch.mention), ephemeral=True)
+                return
         overwrites = {
-        interaction.guild.default_role: discord.PermissionOverwrite(read_messages=False),
-        member: discord.PermissionOverwrite(read_messages=True),
-    }
-        new_channel = await category.create_text_channel(name=channel_name, overwrites=overwrites)
-        welcome_message = f" <a:m_kerohi:1221301733658198046> {member.mention}"
-        embed = discord.Embed(
-                title=(f"Welcome!"),
+            interaction.guild.default_role: discord.PermissionOverwrite(read_messages = False),
+            interaction.user: discord.PermissionOverwrite(read_messages = True, send_messages = True),
+            interaction.guild.me: discord.PermissionOverwrite(read_messages = True, send_messages = True)
+        }
+        ist = pytz.timezone('Asia/Kolkata')
+        now_utc = datetime.now(pytz.utc)
+        now_ist = now_utc.astimezone(ist)
+        time_str1 = now_ist.strftime('%H %M %S %d %m %Y')
+        
+        channel = await category.create_text_channel(
+            name=f"{interaction.user}'s ticket ",
+            topic= f"{interaction.user.id} Place Order {time_str1}",
+            overwrites=overwrites
+        )
+        embed2=discord.Embed(
+                title=f"Ticket Created!",
+                description=f"Staff will be here to assist you soon!",
+                color=discord.Color.green(),)
+        embed2.set_footer(text=f"discord.gg/matcha")
+        embed2.add_field(name=f"Opener:", value=f"{interaction.user.mention} ")
+        await channel.send(f"{interaction.user.mention}",embed=embed2,view=TicketCloser())
+        
+        embed1 = discord.Embed(
+            title=(f"Welcome! <a:m_kerohi:1221301733658198046> "),
+            color=discord.Color.gold()
+        )
+        embed1.add_field(name=f"**Click 'Start Order' to start placing an order!**", value=("- If youd like to check what we offer, press the 'Show menu' button! \n- For further details and pricing, please check the respective discord channels!"), inline=True)
+        
+        await channel.send(embed=embed1, view=Start())
+        await interaction.followup.send(
+            embed=discord.Embed(
+                description= "Created your ticket in {0}".format(channel.mention),
                 color=discord.Color.gold()
-            )
-        embed.add_field(name=f"**Click 'Start Order' to start placing an order!**", value=("- If youd like to check what we offer, press the 'Show menu' button! \n- For further details and pricing, please check the respective discord channels!"), inline=True)
-        view = Start()
-        await new_channel.send(welcome_message, embed=embed, view=view)
-        await interaction.response.send_message(f"Channel has been created. Please check your channel to continue!", ephemeral=True)
+            ), ephemeral=True
+        )
+        
+class TicketCloser(discord.ui.View):
+    def __init__(self):
+        super().__init__(timeout=None)
+    
+    @discord.ui.button(label="Close the ticket",style=discord.ButtonStyle.red,custom_id="closeticket",emoji="🔒")
+    async def close(self, interaction: discord.Interaction, button: discord.Button):
+        await interaction.response.defer(ephemeral=True)
 
+        await interaction.channel.send("Closing ticket", delete_after=2)
+
+        category: discord.CategoryChannel = discord.utils.get(interaction.guild.categories, id = ticketcategory)
+        overwrites = {
+            interaction.guild.default_role: discord.PermissionOverwrite(read_messages=False),
+            interaction.guild.me: discord.PermissionOverwrite(read_messages=True, send_messages=True)
+        }
+        ist = pytz.timezone('Asia/Kolkata')
+        now_utc = datetime.now(pytz.utc)
+        now_ist = now_utc.astimezone(ist)
+        time_str2 = now_ist.strftime('%d/%m/%Y - %H:%M:%S')
+        await interaction.channel.edit(overwrites=overwrites)
+        await interaction.channel.send(
+            embed= discord.Embed(
+                description="Ticket Closed!",
+                color = discord.Color.red()
+            ), view=TicketDestroyer()
+        )
+
+        member = interaction.guild.get_member(int(interaction.channel.topic.split(" ")[0]))
+        hour = (interaction.channel.topic.split(" ")[3])
+        minute = (interaction.channel.topic.split(" ")[4])
+        second = (interaction.channel.topic.split(" ")[5])
+        day = (interaction.channel.topic.split(" ")[6])
+        month = (interaction.channel.topic.split(" ")[7])
+        year = (interaction.channel.topic.split(" ")[8])
+        teem = [hour,minute,second]
+        deet = [day,month,year]
+        stitched_time = ":".join(teem)
+        stitched_date = "/".join(deet)
+
+        await get_transcript(member=member, channel=interaction.channel)
+        file_name = upload(f'{member.id}.html',member.name)
+        link = f"https://nooblej.github.io/Ticket-Trans/tickets/{file_name}"
+         
+        log_channel= interaction.guild.get_channel(logchannel)
+        embed= discord.Embed(
+            title="Ticket Closed!",
+            color=discord.Color.green()
+        )
+        embed.add_field(name="Opened by", value=f"{member.mention}")
+        embed.add_field(name="  ", value="  ")
+        embed.add_field(name="Opened on", value=f"{stitched_date} - {stitched_time}")
+        embed.add_field(name="Closed by", value=f"{interaction.user.mention}")
+        embed.add_field(name="  ", value="  ")
+        embed.add_field(name="Closed on", value=f"{time_str2}")
+        embed.add_field(name='Transcript', value=f"[Link]({link})",inline=False)
+        await log_channel.send(embed=embed)
+        await log_channel.send(f"Transcript link will take a minute to upload, by the time this message disappears the link should be ready.", delete_after=100)
+
+class TicketDestroyer(discord.ui.View):
+    def __init__(self):
+        super().__init__(timeout=None)
+
+    @discord.ui.button(label="Delete the ticket", style=discord.ButtonStyle.red, emoji="🚮", custom_id="trash")
+    async def trash(self, interaction: discord.Interaction, button: discord.Button):
+        await interaction.response.defer()
+        await interaction.channel.send("Deleting ticket")
+        
+
+        await interaction.channel.delete()
+        
+@bot.command()
+@commands.has_permissions(administrator=True)
+async def ticket(ctx):
+    embed = discord.Embed(
+            title=(f"__Place an order!__"),
+            color=discord.Color.green()
+        )
+    embed.add_field(name=f"₊˚๑ **open a ticket to place an order. <:m_froggyheart:1230018352873738301> **", value=(""), inline=False)
+    embed.add_field(name=f" ", value=("<:m_frogangry:1230018348595544136> *please do not open a ticket for no reason*"), inline=False)
+    embed.set_footer(text="discord.gg/matcha")
+    await ctx.send(embed=embed, view=TicketOpener())
 
 class Menu(discord.ui.View):
 
@@ -68,11 +208,11 @@ class Menu(discord.ui.View):
     embed2.add_field(name=f"**Other**", value=("- Check to see if other OTTs or specific subscriptions are available"), inline=True)
     embed2.set_footer(text="discord.gg/matcha")
 
-    @discord.ui.button(label="Page 2", style=discord.ButtonStyle.green, emoji="⏩")
+    @discord.ui.button(label="Page 2", style=discord.ButtonStyle.green, emoji="⏩", custom_id="Nextpage")
     async def page_2(self, interaction: discord.Interaction, button: discord.Button):
         await interaction.response.edit_message(embed=self.embed2,view=menu2())
 
-    @discord.ui.button(label="Close menu", style=discord.ButtonStyle.green, emoji="❌")
+    @discord.ui.button(label="Close menu", style=discord.ButtonStyle.green, emoji="❌",custom_id="cancel")
     async def close_menu(self, interaction: discord.Interaction, button: discord.Button):
         view = Start()
         embed = discord.Embed(
@@ -93,11 +233,11 @@ class menu2(discord.ui.View):
     embed1.add_field(name=f"**Profile Decorations**", value=("- Feelin' Retro \n- Pirates \n- Galaxy\n- Lofi \n- Anime\n- Elements\n- Cyberpunk\n- Fantasy\n- Springtoons\n- Arcade!"), inline=True)
     embed1.add_field(name=f"**Subscriptions**", value=("- Netflix\n- Spotify\n- Youtube premium\n- Sony Liv\n- Crunchyroll\n- Minecraft\n- Prime Video"), inline=True)
 
-    @discord.ui.button(label="Page 1", style=discord.ButtonStyle.green, emoji="⏪")
+    @discord.ui.button(label="Page 1", style=discord.ButtonStyle.green, emoji="⏪",custom_id="previouspage")
     async def page_1(self, interaction: discord.Interaction, button: discord.Button):
         await interaction.response.edit_message(embed=self.embed1, view=Menu())
 
-    @discord.ui.button(label="Close menu", style=discord.ButtonStyle.green, emoji="❌")
+    @discord.ui.button(label="Close menu", style=discord.ButtonStyle.green, emoji="❌", custom_id="cancel2")
     async def close_menu(self, interaction: discord.Interaction, button: discord.Button):
         view = Start()
         embed = discord.Embed(
@@ -107,8 +247,6 @@ class menu2(discord.ui.View):
         embed.add_field(name=f"**Click 'Start Order' to start placing an order!**", value=("- If youd like to check what we offer, press the 'Show menu' button! \n- For further details and pricing, please check the respective discord channels!"), inline=True)
         await interaction.response.edit_message(embed=embed, view=view)
 
-
-        
     # @discord.ui.button(label="Page 1", style=discord.ButtonStyle.green, emoji="⏪")
     # async def page_1(self, interaction: discord.Interaction, button: discord.Button):
     #     self.current_page = 1
@@ -129,8 +267,10 @@ class menu2(discord.ui.View):
     #     await interaction.response.edit_message(embed=embed, view=self.clear_items().add_item(*buttons))
 
 class Start(discord.ui.View):
+    def __init__(self):
+        super().__init__(timeout=None)
 
-    @discord.ui.button(label="Start order!", style=discord.ButtonStyle.blurple, emoji="📃")
+    @discord.ui.button(label="Start order!", style=discord.ButtonStyle.blurple, emoji="📃",custom_id="start")
     async def confirm(self, interaction : discord.Interaction, button : discord.Button):
         button.disabled=True
         await interaction.response.edit_message(view=self)
@@ -151,7 +291,7 @@ class Start(discord.ui.View):
     embed1.add_field(name=f"**Profile Decorations**", value=("- Feelin' Retro \n- Pirates \n- Galaxy\n- Lofi \n- Anime\n- Elements\n- Cyberpunk\n- Fantasy\n- Springtoons\n- Arcade!"), inline=True)
     embed1.add_field(name=f"**Subscriptions**", value=("- Netflix\n- Spotify\n- Youtube premium\n- Sony Liv\n- Crunchyroll\n- Minecraft\n- Prime Video"), inline=True)
 
-    @discord.ui.button(label="Show Menu", style= discord.ButtonStyle.green, emoji="🛎")
+    @discord.ui.button(label="Show Menu", style= discord.ButtonStyle.green, emoji="🛎", custom_id="showmenu")
     async def show(self, interaction: discord.Interaction, button: discord.Button):
         view = Menu()
         await interaction.response.edit_message(embed=self.embed1,view=view)
@@ -1412,17 +1552,6 @@ async def comp(ctx):
     await ctx.channel.purge(limit=1)
     await ctx.send(embed = embed)
 
-@bot.command()
-async def q(ctx,*,message): #, order2: Optional[str] = None, order3: Optional[str] = None
-
-    message_parts = message.split(",")
-    buyer = message_parts[0].strip()
-    payment = message_parts[1].strip()
-    products = "<:greendino:1230017724508540979> \n".join([part.strip() for part in message_parts[2:]])  # Join remaining parts for products
-
-
-    await ctx.channel.purge(limit=1)
-    await ctx.send(f'‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎**new order** ***!*** \n<:m_greenbow:1230017703650000917>Buyer : {buyer}\n{products}<:greendino:1230017724508540979> \n <:00niasarrow:1254656773256646739> {payment}')
 
 @bot.command()
 async def order(ctx):
@@ -1450,50 +1579,8 @@ async def menu(ctx):
     embed1.add_field(name=f"**Subscriptions**", value=("- Netflix\n- Spotify\n- Youtube premium\n- Sony Liv\n- Crunchyroll\n- Minecraft\n- Prime Video"), inline=True)
     await ctx.send(embed=embed1,view=view)
 
-@bot.command()
-async def ticket(ctx):
-    view = TicketMaster()
-    await ctx.channel.purge(limit = 1)
-    await ctx.send(view = view)
 
-@bot.command()
-async def close(ctx):
-    channel_nm = ctx.channel.name
-    if channel_nm.startswith("m_"):
-        transcript = ""
-        async for message in ctx.channel.history(limit=100, oldest_first = True):
-            if isinstance(message.content, discord.ui.Modal):  # Check for modal message
-                transcript += f"**Modal:** A modal was used here. (Content unavailable in transcript)\n"
-            elif isinstance(message.embeds, discord.Embed):  # Check for embed message
-                embed = message.embeds[0]  # Assuming one embed per message
-                transcript += f"**Embed:**\n"
-                if embed.title:
-                    transcript += f"- Title: {embed.title}\n"
-                if embed.description:
-                    transcript += f"- Description: {embed.description}\n"
-            else:
-                timestamp = message.created_at.strftime("%Y-%m-%d %H:%M:%S")  # Customize format if needed
-                transcript += f"{timestamp} - {message.author.name}: {message.content}\n"
-            
-        transcript_file = io.StringIO(transcript)
-        transcript_file.name = f"transcript_{ctx.channel.name}.txt"
-        chan = bot.get_channel(channelT)
-        embed = discord.Embed(
-            title=(f"Ticket brief!"),
-            color=discord.Color.og_blurple()
-        )
-        embed.add_field(name=f"User: {ctx.channel.name}", value=f" ", inline=False)
-        embed.set_footer(text="discord.gg/matcha")
-        await chan.send(embed=embed)
-        await chan.send(file=discord.File(transcript_file, filename=transcript_file.name))
-        await ctx.channel.delete()
-
-    else:
-        await ctx.send("Failed", delete_after=5)
-
-
-
-bot.run(' ')
+bot.run(token)
 
 # @bot.event
 # async def on_message(message):
