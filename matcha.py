@@ -97,7 +97,10 @@ class TicketOpener(discord.ui.View):
                 color=discord.Color.green(),)
         embed2.set_footer(text=f"discord.gg/matcha")
         embed2.add_field(name=f"Opener:", value=f"{interaction.user.mention} ")
-        await channel.send(f"{interaction.user.mention}",embed=embed2,view=TicketCloser())
+        role_id = 1221251673926668359
+        guild = interaction.guild
+        role = guild.get_role(role_id)
+        await channel.send(f"{interaction.user.mention} {role.mention}",embed=embed2,view=TicketCloser())
         
         embed1 = discord.Embed(
             title=(f"Welcome! <a:m_kerohi:1221301733658198046> "),
@@ -1476,7 +1479,8 @@ class MainView(discord.ui.View):
 
 @bot.command()
 async def ping(ctx):
-    await ctx.send(f"Pong <a:m_kerohi:1221301733658198046>")
+
+    await ctx.send(f"Pong <a:m_kerohi:1221301733658198046>" )
     
 @bot.command()
 async def setup(ctx):
