@@ -1583,6 +1583,16 @@ async def menu(ctx):
     embed1.add_field(name=f"**Subscriptions**", value=("- Netflix\n- Spotify\n- Youtube premium\n- Sony Liv\n- Crunchyroll\n- Minecraft\n- Prime Video"), inline=True)
     await ctx.send(embed=embed1,view=view)
 
+@bot.command(help = "- Direct messages guild member", description = "Works with nickname, mentions and ID", brief = "- Sends messages to guild member")
+async def notice(ctx, id: discord.Member | int , *msg):
+    if id is int:
+        user_id = id
+        user = await bot.fetch_user(user_id)
+        await user.send(' '.join(msg))
+        await ctx.send(f'Sent message to {user}')
+    else:
+        await id.send(' '.join(msg))
+        await ctx.send(f'Sent message to {id}')
 
 bot.run(token)
 
