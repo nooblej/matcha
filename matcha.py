@@ -72,10 +72,6 @@ class TicketOpener(discord.ui.View):
     async def ticket(self, interaction:discord.Interaction, button: discord.Button):
         await interaction.response.defer(ephemeral=True)
         category: discord.CategoryChannel = discord.utils.get(interaction.guild.categories, id = ticketcategory)
-        for ch in category.text_channels:
-            if ch.topic.startswith(f"{interaction.user.id} Place Order"):
-                await interaction.followup.send("You already have a ticket in {0}".format(ch.mention), ephemeral=True)
-                return
         overwrites = {
             interaction.guild.default_role: discord.PermissionOverwrite(read_messages = False),
             interaction.user: discord.PermissionOverwrite(read_messages = True, send_messages = True),
@@ -85,7 +81,6 @@ class TicketOpener(discord.ui.View):
         now_utc = datetime.now(pytz.utc)
         now_ist = now_utc.astimezone(ist)
         time_str1 = now_ist.strftime('%H %M %S %d %m %Y')
-        
         channel = await category.create_text_channel(
             name=f"{interaction.user}'s ticket ",
             topic= f"{interaction.user.id} Place Order {time_str1}",
@@ -1544,7 +1539,34 @@ async def queue(ctx):
     await ctx.send(embed = embed)
 
 @bot.command()
-async def comp(ctx):
+async def com(ctx):
+    embed = discord.Embed(
+        colour=discord.Colour.dark_green(),
+        description= "## <:m_greenbow:1230017722252001363> __Order is now complete!__ <:m_greenbow:1230017722252001363>",
+        title= "Order Status update",
+    )
+    embed.add_field(name='<:m_greenheart:1230018368338133054> Thank you for trusting us!',value='- Check your dms <3\n- Vouch to activate warranty\n- Hope to see you again!', inline=False)
+    embed.set_thumbnail(url='https://cdn.discordapp.com/attachments/920899490574110730/1248869818937901136/a_7dd45d52d7262c3a764ec9f82908def2.gif?ex=66653c27&is=6663eaa7&hm=4f3cf9846ec7c3f87e6f3ef01a49e27e57518a28f96230f34641e94751d57024&')
+    embed.set_footer(text = "discord.gg/matcha")
+    await ctx.channel.purge(limit=1)
+    await ctx.send(embed = embed)
+
+@bot.command()
+async def comp(ctx, id: discord.Member | int):
+    message = f"Your order is complete. Thank you so much for ordering <3"
+    await ctx.message.delete()
+    if not(has_staff_perms(ctx.author) or ctx.author.guild_permissions.administrator):
+        await ctx.send("https://media.discordapp.net/attachments/920882963103756298/939096996483039252/shut-up-low-rank-low-rank.gif?ex=668bb7bb&is=668a663b&hm=05a2127b4a0a14a1fa20a5b77045360cc3b8ea46e3d4e696a1e642bef6444ab9&", delete_after = 10)
+    else:
+        if id is int:
+            user_id = id
+            user = await bot.fetch_user(user_id)
+            await user.send((message))
+            await ctx.send(f'Sent message to {user}', delete_after=10)
+        else:
+            await id.send((message))
+            await ctx.send(f'Sent message to {id}', delete_after=10)
+
     embed = discord.Embed(
         colour=discord.Colour.dark_green(),
         description= "## <:m_greenbow:1230017722252001363> __Order is now complete!__ <:m_greenbow:1230017722252001363>",
@@ -1596,6 +1618,22 @@ async def dm(ctx, id: discord.Member | int , *msg):
             await ctx.send(f'Sent message to {user}')
         else:
             await id.send(' '.join(msg))
+            await ctx.send(f'Sent message to {id}')
+
+@bot.command()
+async def dms(ctx, id: discord.Member | int , *msg):
+    message = ' '.join(msg)
+    await ctx.message.delete()
+    if not(has_staff_perms(ctx.author) or ctx.author.guild_permissions.administrator):
+        await ctx.send("https://media.discordapp.net/attachments/920882963103756298/939096996483039252/shut-up-low-rank-low-rank.gif?ex=668bb7bb&is=668a663b&hm=05a2127b4a0a14a1fa20a5b77045360cc3b8ea46e3d4e696a1e642bef6444ab9&", delete_after = 10)
+    else:
+        if id is int:
+            user_id = id
+            user = await bot.fetch_user(user_id)
+            await user.send(' '.join(message))
+            await ctx.send(f'Sent message to {user}')
+        else:
+            await id.send(' '.join(message))
             await ctx.send(f'Sent message to {id}')
         
 @bot.command()
