@@ -1583,16 +1583,39 @@ async def menu(ctx):
     embed1.add_field(name=f"**Subscriptions**", value=("- Netflix\n- Spotify\n- Youtube premium\n- Sony Liv\n- Crunchyroll\n- Minecraft\n- Prime Video"), inline=True)
     await ctx.send(embed=embed1,view=view)
 
-@bot.command(help = "- Direct messages guild member", description = "Works with nickname, mentions and ID", brief = "- Sends messages to guild member")
-async def notice(ctx, id: discord.Member | int , *msg):
-    if id is int:
-        user_id = id
-        user = await bot.fetch_user(user_id)
-        await user.send(' '.join(msg))
-        await ctx.send(f'Sent message to {user}')
+@bot.command()
+async def dm(ctx, id: discord.Member | int , *msg):
+    await ctx.message.delete()
+    if not(has_staff_perms(ctx.author) or ctx.author.guild_permissions.administrator):
+        await ctx.send("https://media.discordapp.net/attachments/920882963103756298/939096996483039252/shut-up-low-rank-low-rank.gif?ex=668bb7bb&is=668a663b&hm=05a2127b4a0a14a1fa20a5b77045360cc3b8ea46e3d4e696a1e642bef6444ab9&", delete_after = 10)
     else:
-        await id.send(' '.join(msg))
-        await ctx.send(f'Sent message to {id}')
+        if id is int:
+            user_id = id
+            user = await bot.fetch_user(user_id)
+            await user.send(' '.join(msg))
+            await ctx.send(f'Sent message to {user}')
+        else:
+            await id.send(' '.join(msg))
+            await ctx.send(f'Sent message to {id}')
+        
+@bot.command()
+async def say(ctx, *msg):
+    await ctx.message.delete()
+    if not (has_staff_perms(ctx.author) or ctx.author.guild_permissions.administrator):
+        await ctx.send("https://media.discordapp.net/attachments/920882963103756298/939096996483039252/shut-up-low-rank-low-rank.gif?ex=668bb7bb&is=668a663b&hm=05a2127b4a0a14a1fa20a5b77045360cc3b8ea46e3d4e696a1e642bef6444ab9&", delete_after = 10)
+        return
+    else:
+        await ctx.send(' '.join(msg))
+
+def has_staff_perms(member: discord.Member) -> bool:
+    staff_roles = {"❝⠀staff⠀₊˚ʚ⠀🍐 ⠀❞","❝⠀own⠀₊˚ʚ⠀🥝 ⠀❞"} 
+    for role in member.roles:
+        if role.name in staff_roles:
+            return True
+    return False
+    
+
+
 
 bot.run(token)
 
