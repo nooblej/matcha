@@ -1652,7 +1652,10 @@ def has_staff_perms(member: discord.Member) -> bool:
             return True
     return False
     
-
+@bot.command()
+async def close(ctx):
+    view = TicketCloser()
+    await ctx.send(view=view)
 
 
 bot.run(token)
