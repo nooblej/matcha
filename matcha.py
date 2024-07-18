@@ -1653,8 +1653,13 @@ def has_staff_perms(member: discord.Member) -> bool:
     return False
     
 @bot.command()
-async def close(ctx):
+async def close(ctx, *reason):
+    member = ctx.guild.get_member(int(ctx.channel.topic.split(" ")[0]))
     view = TicketCloser()
+    if not reason:
+        reason = ('None',)
+    reson = ' '.join(reason)
+    await member.send(f"Your ticket has been closed. Reason: {reson}")
     await ctx.send(view=view)
 
 
