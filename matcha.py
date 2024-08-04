@@ -206,6 +206,21 @@ class Menu(discord.ui.View):
     embed2.add_field(name=f"**Other**", value=("- Check to see if other OTTs or specific subscriptions are available"), inline=True)
     embed2.set_footer(text="discord.gg/matcha")
 
+    @discord.ui.button(label="Start order!", style=discord.ButtonStyle.blurple, emoji="🛎",custom_id="start")
+    async def confirm(self, interaction : discord.Interaction, button : discord.Button):
+        try: 
+            button.disabled=True
+            await interaction.response.edit_message(view=self)
+            await interaction.channel.send(f'What would you like to buy <a:m_kerohi:1221301733658198046>?')
+            v = MainView()
+            await interaction.channel.send(view=v)
+            await v.wait()
+            await v.wait()
+        except discord.errors.HTTPException as e:
+    # Handle the exception here
+            await interaction.channel.send(f"An error occurred: {e}")
+        self.stop
+
     @discord.ui.button(label="Page 2", style=discord.ButtonStyle.green, emoji="⏩", custom_id="Nextpage")
     async def page_2(self, interaction: discord.Interaction, button: discord.Button):
         await interaction.response.edit_message(embed=self.embed2,view=menu2())
@@ -219,6 +234,8 @@ class Menu(discord.ui.View):
         )
         embed.add_field(name=f"**Click 'Start Order' to start placing an order!**", value=("- If youd like to check what we offer, press the 'Show menu' button! \n- For further details and pricing, please check the respective discord channels!"), inline=True)
         await interaction.response.edit_message(embed=embed, view=view)
+
+
     
 class menu2(discord.ui.View):
     embed1 = discord.Embed(
@@ -230,6 +247,21 @@ class menu2(discord.ui.View):
     embed1.add_field(name=f"**Game Credits**", value=("- Robux\n- Vbucks"), inline=False)
     embed1.add_field(name=f"**Profile Decorations**", value=("- Feelin' Retro \n- Pirates \n- Galaxy\n- Lofi \n- Anime\n- Elements\n- Cyberpunk\n- Fantasy\n- Springtoons\n- Arcade!"), inline=True)
     embed1.add_field(name=f"**Subscriptions**", value=("- Netflix\n- Spotify\n- Youtube premium\n- Sony Liv\n- Crunchyroll\n- Minecraft\n- Prime Video"), inline=True)
+
+    @discord.ui.button(label="Start order!", style=discord.ButtonStyle.blurple, emoji="🛎",custom_id="start")
+    async def confirm(self, interaction : discord.Interaction, button : discord.Button):
+        try: 
+            button.disabled=True
+            await interaction.response.edit_message(view=self)
+            await interaction.channel.send(f'What would you like to buy <a:m_kerohi:1221301733658198046>?')
+            v = MainView()
+            await interaction.channel.send(view=v)
+            await v.wait()
+            await v.wait()
+        except discord.errors.HTTPException as e:
+    # Handle the exception here
+            await interaction.channel.send(f"An error occurred: {e}")
+        self.stop
 
     @discord.ui.button(label="Page 1", style=discord.ButtonStyle.green, emoji="⏪",custom_id="previouspage")
     async def page_1(self, interaction: discord.Interaction, button: discord.Button):
@@ -244,6 +276,8 @@ class menu2(discord.ui.View):
         )
         embed.add_field(name=f"**Click 'Start Order' to start placing an order!**", value=("- If youd like to check what we offer, press the 'Show menu' button! \n- For further details and pricing, please check the respective discord channels!"), inline=True)
         await interaction.response.edit_message(embed=embed, view=view)
+
+
 
     # @discord.ui.button(label="Page 1", style=discord.ButtonStyle.green, emoji="⏪")
     # async def page_1(self, interaction: discord.Interaction, button: discord.Button):
