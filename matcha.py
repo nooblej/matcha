@@ -156,7 +156,7 @@ class TicketCloser(discord.ui.View):
          
         log_channel= interaction.guild.get_channel(logchannel)
         embed= discord.Embed(
-            title="Ticket Closed!",
+            title="Ticket Closed!", 
             color=discord.Color.green()
         )
         embed.add_field(name="Opened by", value=f"{member.mention}")
@@ -268,15 +268,19 @@ class Start(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
 
-    @discord.ui.button(label="Start order!", style=discord.ButtonStyle.blurple, emoji="📃",custom_id="start")
+    @discord.ui.button(label="Start order!", style=discord.ButtonStyle.blurple, emoji="🛎",custom_id="start")
     async def confirm(self, interaction : discord.Interaction, button : discord.Button):
-        button.disabled=True
-        await interaction.response.edit_message(view=self)
-        view=MainView()
-        await interaction.channel.send(f'What would you like to buy <a:m_kerohi:1221301733658198046>?')
-        await interaction.channel.send(view=view)
-        await view.wait()
-        await view.wait()
+        try: 
+            button.disabled=True
+            await interaction.response.edit_message(view=self)
+            await interaction.channel.send(f'What would you like to buy <a:m_kerohi:1221301733658198046>?')
+            v = MainView()
+            await interaction.channel.send(view=v)
+            await v.wait()
+            await v.wait()
+        except discord.errors.HTTPException as e:
+        # Handle the exception here
+            await interaction.channel.send(f"An error occurred: {e}")
         self.stop
 
     embed1 = discord.Embed(
@@ -289,7 +293,7 @@ class Start(discord.ui.View):
     embed1.add_field(name=f"**Profile Decorations**", value=("- Feelin' Retro \n- Pirates \n- Galaxy\n- Lofi \n- Anime\n- Elements\n- Cyberpunk\n- Fantasy\n- Springtoons\n- Arcade!"), inline=True)
     embed1.add_field(name=f"**Subscriptions**", value=("- Netflix\n- Spotify\n- Youtube premium\n- Sony Liv\n- Crunchyroll\n- Minecraft\n- Prime Video"), inline=True)
 
-    @discord.ui.button(label="Show Menu", style= discord.ButtonStyle.green, emoji="🛎", custom_id="showmenu")
+    @discord.ui.button(label="Show Menu", style= discord.ButtonStyle.green, emoji="📃", custom_id="showmenu")
     async def show(self, interaction: discord.Interaction, button: discord.Button):
         view = Menu()
         await interaction.response.edit_message(embed=self.embed1,view=view)
@@ -1265,7 +1269,7 @@ class OrderDropdown(discord.ui.Select):#reworked
             discord.SelectOption(label='Subscriptions', description='Choose one of our various video and audio streaming services!', emoji='<:77927netflixblack:1239509363568414740>', value='Subscription'),
             discord.SelectOption(label='Game Credits', description="Buy in game currency at discounted rates!", emoji='<:m_robux:1231178907865317417>', value='GameCredits'),
             discord.SelectOption(label='Steam Games', description="Buy steam games at discounted rates!", emoji='<:47647steam:1239509355255169106>', value='SteamGames'),
-            discord.SelectOption(label='Aged Accounts', description='Buy old accounts from upto 2016 at a discount!' , emoji='<:DiscordLogoOld:866085733587353620>', value='AgedAccounts'),
+            discord.SelectOption(label='Aged Accounts', description='Buy old accounts from upto 2016 at a discount!' ,emoji = '<:m_earlysupporter:1269552521517600798>',value='AgedAccounts'),
             discord.SelectOption(label='Social Boosts', description='Choose one of our various Social media boosting services1', emoji='<:98820instagram:1239509369192714291>', value='SocialBoosts'),
             discord.SelectOption(label='Server Members', description='Buy active or inactive server members for cheap!' , emoji='<:members:1239545776951132252>', value='ServerMembers'),
             discord.SelectOption(label='Other', description="Select this if your order isnt on our list!", emoji='<:m_toroconfused:1233396013360877639>', value='Other')
