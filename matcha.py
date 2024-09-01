@@ -20,12 +20,12 @@ gittoken = ''
 bot = commands.Bot(command_prefix=',', intents=discord.Intents.all())
 
 #ticketcategory = category under which the tickets should open
-ticketcategory = 1221296687234945024   
-categories = ["1221296687234945024 - orders (matcha)", 
+ticketcategory = 1279086951869448305   
+categories = ["1279086951869448305 - orders (matcha)", 
               "1254554932003078235 - Sussy baka (boot)"]
 #logchannel = channel where the transcript wagera has to be sent
-logchannel = 1221251674518065292 #boot log channel
-logchannels = ["1221251674518065292 - Ticket-logs (matcha)",
+logchannel = 1279088204351541300 #boot log channel
+logchannels = ["1279088204351541300 - Ticket-logs (matcha)",
                "1256131499355410493 - log-channel (boot)"]
 
 
@@ -92,7 +92,7 @@ class TicketOpener(discord.ui.View):
                 color=discord.Color.green(),)
         embed2.set_footer(text=f"discord.gg/matcha")
         embed2.add_field(name=f"Opener:", value=f"{interaction.user.mention} ")
-        role_id = 1221251673926668359
+        role_id = 1279086521516949565
         guild = interaction.guild
         role = guild.get_role(role_id)
         await channel.send(f"{interaction.user.mention} {role.mention}",embed=embed2,view=TicketCloser())
